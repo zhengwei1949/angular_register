@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>注册案例</title>
+</head>
+<!-- 2.加上ng-app指令 -->
+<body ng-app="myApp">
+  <!-- view 开始 -->
+  <table ng-controller="demoController">
+    <tr><td>用户名: <input type="text" ng-model="username"></td></tr>
+    <!-- <tr><td>用户类型: <input type="text" ng-model="usertype"></td></tr> -->
+    <tr><td>
+    <input type="text" ng-model="usertype">
+    </td></tr>
+    <tr><td>密码: <input type="text" ng-model="userpwd"></td></tr>
+    <tr><td>确认密码: <input type="text" ng-model="confirmpwd"></td></tr>
+    <tr><td>注册协议: <input type="checkbox" ng-model="isagree"></td></tr>
+    <tr><td><input type="button" value="注册" ng-click="register()"></td></tr>
+    <tr><td>{{msg}}</td></tr>
+  </table>
+  <!-- View 结束 -->
+  <!-- 1.引入angular.js文件 -->
+  <script src="libs/angular.js"></script>
+  <script>
+    // 3.创建模块
+    var app = angular.module('myApp',[])
+
+    // Controller 开始
+    // 4.创建控制器
+    app.controller('demoController',function($scope){
+      // 初化数据模型
+      $scope.username = ''
+      $scope.usertype = ''
+      $scope.userpwd = ''  
+      $scope.confirmpwd = ''
+      $scope.isagree = false
+      $scope.msg = ''
+
+      // 初始化行为模型
+      $scope.register = function(){
+
+      }
+        
+    })
+    
+  </script>
+</body>
+</html> 

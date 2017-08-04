@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>注册案例</title>
+</head>
+<!-- 2.加上ng-app指令 -->
+<body ng-app="myApp">
+  <!-- view 开始 -->
+  <table ng-controller="demoController">
+    <tr><td>用户名: <input type="text" ng-model="username"></td></tr>
+    <!-- <tr><td>用户类型: <input type="text" ng-model="usertype"></td></tr> -->
+    <tr><td>
+    <input type="text" ng-model="usertype">
+    </td></tr>
+    <tr><td>密码: <input type="text" ng-model="userpwd"></td></tr>
+    <tr><td>确认密码: <input type="text" ng-model="confirmpwd"></td></tr>
+    <tr><td>注册协议: <input type="checkbox" ng-model="isagree"></td></tr>
+    <tr><td><input type="button" value="注册" ng-click="register()"></td></tr>
+    <tr><td>{{msg}}</td></tr>
+  </table>
+  <!-- View 结束 -->
+  <!-- 1.引入angular.js文件 -->
+  <script src="libs/angular.js"></script>
+  <script>
+    // 3.创建模块
+    var app = angular.module('myApp',[])
+
+    // Controller 开始
+    // 4.创建控制器
+    app.controller('demoController',function($scope){
+      // 初化数据模型
+      $scope.username = '' // 用户名不能少于6位
+      $scope.usertype = ''
+      $scope.userpwd = ''  // 密码不能少于6位
+      $scope.confirmpwd = '' // 确认密码要和密码相等
+      $scope.isagree = false
+      $scope.msg = '' // 提示信息
+
+      // 初始化行为模型
+      $scope.register = function(){
+        // 判断用户名
+        if($scope.username.length<6){
+          // alert('用户名太短!')
+          $scope.msg='用户名太短！'
+          return
+        }
+        if($scope.userpwd.length<6){
+          $scope.msg='密码太短,不安全!'
+          return
+        }
+        if($scope.userpwd !== $scope.confirmpwd){
+          $scope.msg='两次输入的密码不一致，请重新输入!'
+          return 
+        }
+
+        // 准备存储数据
+        // 调用用Model里的方法.
+        var u = new User($scope.username,$scope.userpwd,$scope.usertype)
+        // 我们希望得到一个返回值表明是否注册成功!
+        var result = u.save()
+        if(result){
+          $scope.msg = '注册成功!'
+        }else{
+          $scope.msg = '注册失败！'
+        }
+      }
+    })
+    // Controller 结束
+
+    // Model 开始
+    function User(name,pwd,type){
+      this.name = name
+      this.pwd = pwd
+      this.type = type
+    }
+    // 存储数据的方法
+    User.prototype.save = function(){
+      // 判断用户名是否存在
+      // myusers
+      var str = localStorage.getItem('myusers')||'[]'
+      var arr = JSON.parse(str)
+      for (var i = 0; i < arr.length; i++) {
+         // 如果存在则返回false表明注册失败
+        if(arr[i].name===this.name){
+          return 
+        }
+      }
+      // 如果不存在，要把数据保存起来，返回true表示注册成功
+      arr.push({name:this.name,pwd:this.pwd,type:this.type})
+      localStorage.setItem('myusers',JSON.stringify(arr))
+      return true
+      // [{name:,pwd},{}]
+      // localStorage.setItem('','')
+    }
+  </script>
+</body>
+</html>
